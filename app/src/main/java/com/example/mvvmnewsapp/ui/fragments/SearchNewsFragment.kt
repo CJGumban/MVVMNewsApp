@@ -9,6 +9,8 @@ import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +32,7 @@ import kotlinx.coroutines.launch
 
 class SearchNewsFragment : Fragment() {
 
-    lateinit var viewModel: NewsViewModel
+    private val viewModel: NewsViewModel by activityViewModels()
     private lateinit var newsAdapter: NewsAdapter
     private var _binding: FragmentSearchNewsBinding? = null
     private val binding get() = _binding!!
@@ -49,7 +51,6 @@ class SearchNewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
         var job: Job? = null

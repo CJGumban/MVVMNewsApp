@@ -7,9 +7,6 @@ import android.net.ConnectivityManager.TYPE_ETHERNET
 import android.net.ConnectivityManager.TYPE_MOBILE
 import android.net.ConnectivityManager.TYPE_WIFI
 import android.net.NetworkCapabilities
-import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
-import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
-import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -20,15 +17,17 @@ import com.example.mvvmnewsapp.models.Article
 import com.example.mvvmnewsapp.models.NewsResponse
 import com.example.mvvmnewsapp.repository.NewsRepository
 import com.example.mvvmnewsapp.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class NewsViewModel(
-    app: Application,
-    val newsRepository: NewsRepository
-): AndroidViewModel(app) {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val newsRepository: NewsRepository
+): ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
@@ -104,7 +103,7 @@ class NewsViewModel(
     private suspend fun safeBreakingNewsCall(countryCode: String){
         breakingNews.postValue(Resource.Loading())
         try{
-            if(hasInternetConnection()){
+            if(true){
                 val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
             } else
@@ -121,7 +120,7 @@ class NewsViewModel(
     private suspend fun safeSearchNewsCall(searchQuery: String){
         searchNews.postValue(Resource.Loading())
         try{
-            if(hasInternetConnection()){
+            if(true){
                 val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 breakingNews.postValue(handleSearchNewsResponse(response))
             } else
@@ -135,7 +134,7 @@ class NewsViewModel(
         }
     }
 
-    private fun hasInternetConnection(): Boolean {
+   /* private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<NewsApp>().getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
@@ -160,7 +159,7 @@ class NewsViewModel(
             }
         }
         return false
-    }
+    }*/
 
 
 }

@@ -14,17 +14,15 @@ import com.example.mvvmnewsapp.R
 import com.example.mvvmnewsapp.db.ArticleDatabase
 import com.example.mvvmnewsapp.repository.NewsRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
-    lateinit var viewModel: NewsViewModel
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val newsRepository = NewsRepository(ArticleDatabase.getDatabase(this))
-        val viewModelProviderFactory = NewsViewModelProviderFactory(application,newsRepository)
-        viewModel = ViewModelProvider(this,viewModelProviderFactory).get(NewsViewModel::class.java)
 
         setContentView(R.layout.activity_main)
         val navHostFragment = supportFragmentManager

@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.navArgs
 
 import com.example.mvvmnewsapp.R
@@ -14,10 +17,11 @@ import com.example.mvvmnewsapp.databinding.FragmentNewsListBinding
 import com.example.mvvmnewsapp.ui.NewsActivity
 import com.example.mvvmnewsapp.ui.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ArticleFragment : Fragment() {
-    private lateinit var viewModel: NewsViewModel
+    private val viewModel: NewsViewModel by activityViewModels()
 
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
@@ -37,7 +41,6 @@ class ArticleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as NewsActivity).viewModel
         val article = args.article
         binding.webView.apply {
             webViewClient = WebViewClient()
