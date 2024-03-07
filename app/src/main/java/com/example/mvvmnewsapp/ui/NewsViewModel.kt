@@ -10,12 +10,15 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mvvmnewsapp.models.Article
 import com.example.mvvmnewsapp.models.NewsResponse
 import com.example.mvvmnewsapp.repository.NewsRepository
+import com.example.mvvmnewsapp.util.ConnectivityObserver
+import com.example.mvvmnewsapp.util.NetworkConnectivityObserver
 import com.example.mvvmnewsapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 
@@ -26,6 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
+    private val networkMonitor: NetworkConnectivityObserver,
     private val newsRepository: NewsRepository
 ): ViewModel() {
 
@@ -38,6 +42,12 @@ class NewsViewModel @Inject constructor(
 
     init {
         getBreakingNews("us")
+        viewModelScope.launch {
+            networkMonitor.observe().collect{
+                Log.i("ViewModel", "testing internet connectivity Status is $it")
+                hasInternet.postValue(it)
+            }
+        }
     }
     fun getBreakingNews(countryCode: String){
         viewModelScope.launch {  safeBreakingNewsCall(countryCode)
@@ -133,6 +143,9 @@ class NewsViewModel @Inject constructor(
             }
         }
     }
+
+    var hasInternet: MutableLiveData<ConnectivityObserver.Status> = MutableLiveData(ConnectivityObserver.Status.Lost)
+
 
    /* private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<NewsApp>().getSystemService(

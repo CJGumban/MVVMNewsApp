@@ -28,6 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class SearchNewsFragment : Fragment() {
@@ -36,10 +37,8 @@ class SearchNewsFragment : Fragment() {
     private lateinit var newsAdapter: NewsAdapter
     private var _binding: FragmentSearchNewsBinding? = null
     private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

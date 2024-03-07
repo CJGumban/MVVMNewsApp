@@ -3,28 +3,42 @@ package com.example.mvvmnewsapp.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import com.example.mvvmnewsapp.R
-import com.example.mvvmnewsapp.db.ArticleDatabase
-import com.example.mvvmnewsapp.repository.NewsRepository
+import com.example.mvvmnewsapp.util.ConnectivityObserver
+import com.example.mvvmnewsapp.util.NetworkConnectivityObserver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
     private lateinit var navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
+
+        /*connectivityObserver = NetworkConnectivityObserver(applicationContext)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                connectivityObserver.observe().collect {
+                    Toast.makeText(applicationContext, "Status is $it", Toast.LENGTH_LONG).show()
+                    Log.i("testing internet", "Status is $it")
+                }
+            }
+        }*/
+
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
