@@ -48,13 +48,7 @@ class NewsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.hasInternet.observe(viewLifecycleOwner, Observer {
-                    Log.i(TAG, "Testing Internet Connectivity Status is $it")
-                })
-            }
-        }
+
         setupRecyclerView()
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {

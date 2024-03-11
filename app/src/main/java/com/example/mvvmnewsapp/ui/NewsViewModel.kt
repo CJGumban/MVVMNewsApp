@@ -45,7 +45,7 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch {
             networkMonitor.observe().collect{
                 Log.i("ViewModel", "testing internet connectivity Status is $it")
-                hasInternet.postValue(it)
+                hasInternet = it
             }
         }
     }
@@ -113,7 +113,7 @@ class NewsViewModel @Inject constructor(
     private suspend fun safeBreakingNewsCall(countryCode: String){
         breakingNews.postValue(Resource.Loading())
         try{
-            if(true){
+            if(hasInternetConnection()){
                 val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
             } else
@@ -130,7 +130,7 @@ class NewsViewModel @Inject constructor(
     private suspend fun safeSearchNewsCall(searchQuery: String){
         searchNews.postValue(Resource.Loading())
         try{
-            if(true){
+            if(hasInternetConnection()){
                 val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 breakingNews.postValue(handleSearchNewsResponse(response))
             } else
@@ -144,7 +144,18 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    var hasInternet: MutableLiveData<ConnectivityObserver.Status> = MutableLiveData(ConnectivityObserver.Status.Lost)
+    var hasInternet = ConnectivityObserver.Status.Lost
+
+    fun hasInternetConnection(): Boolean {
+        when (hasInternet)
+        {
+            ConnectivityObserver.Status.Available -> return true
+            ConnectivityObserver.Status.Unavailable -> return false
+            ConnectivityObserver.Status.Losing -> return false
+            ConnectivityObserver.Status.Lost -> return false
+        }
+        return false
+    }
 
 
    /* private fun hasInternetConnection(): Boolean {
